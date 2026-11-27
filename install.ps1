@@ -20,9 +20,14 @@ if ($Uninstall) {
     return
 }
 
-$src = Join-Path $PSScriptRoot 'target\release'
+# 发布包里 exe 和脚本在同一目录；从源码编译时在 target\release
+$src = $PSScriptRoot
+if (-not (Test-Path (Join-Path $src 'razer-lite.exe'))) { $src = Join-Path $PSScriptRoot 'target\release' }
+if (-not (Test-Path (Join-Path $src 'razer-lite.exe'))) { throw "找不到 razer-lite.exe：请把本脚本和两个 exe 放在同一目录，或先 cargo build --release" }
 New-Item -ItemType Directory -Force $dest | Out-Null
 Copy-Item (Join-Path $src 'razer-lite.exe'), (Join-Path $src 'razer-lite-settings.exe') $dest -Force
+# 去掉“来自网络”的标记，避免开机自启时每次弹 SmartScreen 安全警告
+Get-ChildItem $dest -Filter *.exe | Unblock-File
 
 New-Item -ItemType Directory -Force $menu | Out-Null
 $sh = New-Object -ComObject WScript.Shell

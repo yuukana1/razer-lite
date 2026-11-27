@@ -40,11 +40,16 @@
 
 只在 Razer Viper V3 HyperSpeed 上测过。
 
-## 构建安装
+## 安装
+
+到 [Releases](https://github.com/yuukana1/razer-lite/releases/latest) 下载 zip，解压后运行：
 
 ```powershell
-cargo build --release
 powershell -ExecutionPolicy Bypass -File install.ps1   # 加 -Uninstall 卸载
 ```
+
+exe 没有代码签名，第一次运行 Windows 可能提示“已保护你的电脑”，点「更多信息 → 仍要运行」。
+
+从源码编译：`cargo build --release`，再运行同一个 `install.ps1`。
 
 HID 协议参考 [OpenRazer](https://github.com/openrazer/openrazer)。
